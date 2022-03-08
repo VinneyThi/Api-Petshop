@@ -6,4 +6,5 @@ const api = express()
 
 api.use(bodyparse.json()) 
 api.use('/api/fornecedores', router);
+
 api.listen(config.get('api.port'), ()=> console.log("Server on"))
