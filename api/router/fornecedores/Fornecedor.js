@@ -16,13 +16,29 @@ class Fornecedor {
             email : this.email,
             categoria : this.categoria
         })
-        
+
         this.id = result.id
         this.dataCreate = result.dataCreate
         this.dataUpdate = result.dataUpdate
         this.version = result.version
 
         return JSON.stringify(result)
+    }
+
+    async load(){
+        const result = await TableFornecedor.loadDB(this.id)
+        
+        if (!result)
+        {
+            throw new Error("Não existe esse fornecedor")
+            return;
+        }
+
+        this.dataCreate = result.dataCreate
+        this.dataUpdate = result.dataUpdate
+        this.version = result.version
+        
+        return JSON.stringify(result);
     }
 }
 module.exports = Fornecedor
