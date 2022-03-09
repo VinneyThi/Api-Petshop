@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Table = require('./FornecedoresFunctions')
-const Fornecedor = require('./Fornecedor')
+const Fornecedor = require('./Fornecedor');
+
 
 router.get('/',async (request, response)=> {
     const result = await Table.listAll()
@@ -18,15 +19,14 @@ router.post('/', async (request, response)=> {
 })
 
 
-router.get('/:id', async (request, response)=> {
+router.get('/:id', async (request, response, next)=> {
     try {        
         const id = request.params.id
         const fornecedor  = new Fornecedor({id : id})
         response.status(200)
         response.send(await fornecedor.load())
     } catch (error) {
-        response.status(404)
-        response.send( JSON.stringify({msg: error.message}))    
+        next(error)
     }
 })
 
@@ -41,9 +41,7 @@ router.put('/:id', async (request, response)=> {
         response.status(204)
         response.end()
     } catch (error) {
-        response.status(400)
-        response.send( JSON.stringify({msg: error.message}))    
-    }
+        next(error)    }
 })
 
 
@@ -57,9 +55,7 @@ router.delete('/:id', async (request, response)=>{
         response.end()
         
     } catch (error) {
-        response.status(404)
-        response.send(JSON.stringify({msg: error.message}))
-    }
+        next(error)    }
 })
 
 module.exports = router;

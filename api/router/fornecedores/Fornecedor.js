@@ -1,4 +1,7 @@
 const TableFornecedor = require('./FornecedoresFunctions')
+const InvalidFields = require('../../erros/InvalidFields')
+const NotFound = require('../../erros/NotFound')
+
 class Fornecedor {
     constructor ({id, empresa, email, categoria, dataCreate, dataUpdate, version }){
         this.id = id
@@ -29,9 +32,8 @@ class Fornecedor {
         const result = await TableFornecedor.loadDB(this.id)
         
         if (!result)
-        {
-            throw new Error("Não existe esse fornecedor")
-            return;
+        {   console.log("oi")
+            throw new NotFound("Não existe esse fornecedor")
         }
 
         this.dataCreate = result.dataCreate
@@ -52,7 +54,7 @@ class Fornecedor {
         })
 
         if (updatArr.lengh === 0){
-            throw new Error("Dados invalidos");}
+            throw new InvalidFields("Dados invalidos");}
       
         return await TableFornecedor.updateDB(this.id, dataUpdata)
     }
