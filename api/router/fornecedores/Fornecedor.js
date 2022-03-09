@@ -40,5 +40,21 @@ class Fornecedor {
         
         return JSON.stringify(result);
     }
+
+    async update(){
+        const updatArr = ['empresa','email', 'categoria']
+        const dataUpdata = {}
+        updatArr.forEach((field) =>{
+            const aux = this[field]
+            if( typeof aux === 'string' && aux.length > 0){
+            dataUpdata[field] = aux
+        }
+        })
+
+        if (updatArr.lengh === 0){
+            throw new Error("Dados invalidos");}
+      
+        return await TableFornecedor.updateDB(this.id, dataUpdata)
+    }
 }
 module.exports = Fornecedor

@@ -27,4 +27,17 @@ router.get('/:id', async (request, response)=> {
     }
 })
 
+router.put('/:id', async (request, response)=> {
+    try {        
+        const id = request.params.id
+        const dataBody = request.body
+        const mergeObj = Object.assign({}, dataBody, {id: id})
+        console.log(mergeObj)
+        const fornecedor  = new Fornecedor(mergeObj)
+        response.send(await fornecedor.update())
+    } catch (error) {
+        response.send( JSON.stringify({msg: error.message}))    
+    }
+})
+
 module.exports = router;

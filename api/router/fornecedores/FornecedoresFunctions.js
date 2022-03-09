@@ -7,5 +7,8 @@ module.exports = {
                     "id" : id
                 }
         }
-    )}
+    )},
+    updateDB(id,dataUpdate){
+        return ModelFornecedor.update(dataUpdate, {where:{id:id}})
+    }
 }
