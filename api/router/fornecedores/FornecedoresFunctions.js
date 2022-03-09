@@ -1,7 +1,7 @@
 const ModelFornecedor = require('./ModelFornecedores/model.js')
 
 module.exports = {
-    listAll(){ return ModelFornecedor.findAll()},
+    listAll(){ return ModelFornecedor.findAll({raw: true})},
     Insert(fornecedor){ return ModelFornecedor.create(fornecedor)},
     loadDB(id){ return ModelFornecedor.findOne({where : {
                     "id" : id

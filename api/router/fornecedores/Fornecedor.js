@@ -2,6 +2,16 @@ const TableFornecedor = require('./FornecedoresFunctions')
 const InvalidFields = require('../../erros/InvalidFields')
 const NotFound = require('../../erros/NotFound')
 
+
+function fillterPrivateFields(data){
+    let newData = {}
+    arryFiledsPublic = ['empresa','id','categoria']
+    arryFiledsPublic.forEach(fieldPublic =>{
+        newData[fieldPublic] = data[fieldPublic]
+    })
+
+    return newData
+}
 class Fornecedor {
     constructor ({id, empresa, email, categoria, dataCreate, dataUpdate, version }){
         this.id = id
@@ -10,11 +20,11 @@ class Fornecedor {
         this.categoria = categoria
         this.dataCreate = dataCreate
         this.dataUpdate = dataUpdate
-        this.version = version         
+        this.version = version       
     }
 
     async create(){
-        const result = await  TableFornecedor.Insert({
+        let result = await  TableFornecedor.Insert({
             empresa : this.empresa,
             email : this.email,
             categoria : this.categoria
@@ -24,13 +34,13 @@ class Fornecedor {
         this.dataCreate = result.dataCreate
         this.dataUpdate = result.dataUpdate
         this.version = result.version
-
+        result = fillterPrivateFields(result)
         return JSON.stringify(result)
     }
 
     async load(){
-        const result = await TableFornecedor.loadDB(this.id)
-        
+        let result = await TableFornecedor.loadDB(this.id)
+        console.log("osi")
         if (!result)
         {   console.log("oi")
             throw new NotFound("Não existe esse fornecedor")
@@ -39,7 +49,7 @@ class Fornecedor {
         this.dataCreate = result.dataCreate
         this.dataUpdate = result.dataUpdate
         this.version = result.version
-        
+        result = fillterPrivateFields(result)
         return JSON.stringify(result);
     }
 
@@ -55,12 +65,17 @@ class Fornecedor {
 
         if (updatArr.lengh === 0){
             throw new InvalidFields("Dados invalidos");}
-      
-        return await TableFornecedor.updateDB(this.id, dataUpdata)
+              
+        let result = await TableFornecedor.updateDB(this.id, dataUpdata)
+        return FilterPrivateFields(result)
     }
 
     async delete(){
-        return await TableFornecedor.delete(this.id)
+        const result = await TableFornecedor.delete(this.id)
+        return FilterPrivateFields(result) 
     }
 }
-module.exports = Fornecedor
+module.exports = {
+                    "Fornecedor": Fornecedor,
+                    FilterPrivateFields :fillterPrivateFields                     
+                }

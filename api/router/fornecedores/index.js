@@ -1,13 +1,21 @@
 const router = require('express').Router();
 const Table = require('./FornecedoresFunctions')
-const Fornecedor = require('./Fornecedor');
+const Fornecedor = require('./Fornecedor').Fornecedor;
+const Serialize = require('../../Serialize').SerializeFornecedores
+const Filter  = require('./Fornecedor').FilterPrivateFields
 
 
-router.get('/',async (request, response)=> {
-    const result = await Table.listAll()
-    response.status(200)
-    response.send(JSON.stringify(result)
-        )
+router.get('/',async (request, response, next)=> {
+    try {
+        let lstresult = await Table.listAll()
+        console.log(lstresult)
+        const result = lstresult.map(dataValues => {return Filter(dataValues)})
+        const serializerFornecedores = new Serialize(response.getHeader('Content-Type'))
+        response.status(200)
+        response.send(serializerFornecedores.Serialize(result))   
+    } catch (error) {
+        next(error)
+    }    
 })
 
 
