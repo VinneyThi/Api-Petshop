@@ -10,5 +10,11 @@ module.exports = {
     )},
     updateDB(id,dataUpdate){
         return ModelFornecedor.update(dataUpdate, {where:{id:id}})
+    },
+    delete(id){
+        return ModelFornecedor.destroy({
+            where : {id : id}
+        })
+
     }
 }

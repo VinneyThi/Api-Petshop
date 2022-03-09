@@ -56,5 +56,9 @@ class Fornecedor {
       
         return await TableFornecedor.updateDB(this.id, dataUpdata)
     }
+
+    async delete(){
+        return await TableFornecedor.delete(this.id)
+    }
 }
 module.exports = Fornecedor

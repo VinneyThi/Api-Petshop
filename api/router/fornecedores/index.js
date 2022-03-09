@@ -4,6 +4,7 @@ const Fornecedor = require('./Fornecedor')
 
 router.get('/',async (request, response)=> {
     const result = await Table.listAll()
+    response.status(200)
     response.send(JSON.stringify(result)
         )
 })
@@ -12,7 +13,7 @@ router.get('/',async (request, response)=> {
 router.post('/', async (request, response)=> {
     const dataBody = request.body
     const fornecedor  = new Fornecedor(dataBody)
-
+    response.status(201)
     response.send(await fornecedor.create())
 })
 
@@ -21,8 +22,10 @@ router.get('/:id', async (request, response)=> {
     try {        
         const id = request.params.id
         const fornecedor  = new Fornecedor({id : id})
+        response.status(200)
         response.send(await fornecedor.load())
     } catch (error) {
+        response.status(404)
         response.send( JSON.stringify({msg: error.message}))    
     }
 })
@@ -34,9 +37,28 @@ router.put('/:id', async (request, response)=> {
         const mergeObj = Object.assign({}, dataBody, {id: id})
         console.log(mergeObj)
         const fornecedor  = new Fornecedor(mergeObj)
-        response.send(await fornecedor.update())
+        await fornecedor.update()
+        response.status(204)
+        response.end()
     } catch (error) {
+        response.status(400)
         response.send( JSON.stringify({msg: error.message}))    
+    }
+})
+
+
+router.delete('/:id', async (request, response)=>{
+    try {
+        const id = request.params.id
+        const fornecedor = new Fornecedor({id : id})
+        fornecedor.load()
+        fornecedor.delete()
+        response.status(204)
+        response.end()
+        
+    } catch (error) {
+        response.status(404)
+        response.send(JSON.stringify({msg: error.message}))
     }
 })
 
