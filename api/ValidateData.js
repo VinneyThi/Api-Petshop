@@ -9,7 +9,7 @@ class ValidateData{
         if (contentType === '*/*'){
             contentType = 'application/json'
         }
-        else if (!IsValidated(contentType)){ 
+        else if (!this.IsValidated(contentType)){ 
             response.status(406)
             response.end()        
             return   

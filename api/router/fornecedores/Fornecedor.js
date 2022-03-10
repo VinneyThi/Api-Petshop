@@ -35,7 +35,7 @@ class Fornecedor {
         this.dataUpdate = result.dataUpdate
         this.version = result.version
         result = fillterPrivateFields(result)
-        return JSON.stringify(result)
+        return result
     }
 
     async load(){
@@ -50,7 +50,7 @@ class Fornecedor {
         this.dataUpdate = result.dataUpdate
         this.version = result.version
         result = fillterPrivateFields(result)
-        return JSON.stringify(result);
+        return result
     }
 
     async update(){

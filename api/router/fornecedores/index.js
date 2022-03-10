@@ -22,8 +22,12 @@ router.get('/',async (request, response, next)=> {
 router.post('/', async (request, response)=> {
     const dataBody = request.body
     const fornecedor  = new Fornecedor(dataBody)
+    const resultFull = await fornecedor.create()
+
+    const result = Filter(resultFull)
+    const serializerFornecedores = new Serialize(response.getHeader('Content-Type'))
     response.status(201)
-    response.send(await fornecedor.create())
+    response.send(serializerFornecedores.Serialize(result))
 })
 
 
@@ -32,7 +36,12 @@ router.get('/:id', async (request, response, next)=> {
         const id = request.params.id
         const fornecedor  = new Fornecedor({id : id})
         response.status(200)
-        response.send(await fornecedor.load())
+        const resultFull = await fornecedor.load()
+
+        const result = Filter(resultFull)
+        const serializerFornecedores = new Serialize(response.getHeader('Content-Type'))
+        response.status(200)
+        response.send(serializerFornecedores.Serialize(result))   
     } catch (error) {
         next(error)
     }

@@ -10,7 +10,7 @@ const validateData = new ValidateData(arryAcceptType)
 const api = express()
 
 api.use(bodyparse.json()) 
-api.use(validateData.Manager)
+api.use((request, response, next)=> validateData.Manager(request, response, next))
 api.use('/api/fornecedores', router)
 api.use(CatchErros)
 
